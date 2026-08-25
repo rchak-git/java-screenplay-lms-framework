@@ -1,0 +1,19 @@
+VALID_USER:
+  username: "standard_user"
+  password: "secret_sauce"
+  expectedUrl: "https://www.saucedemo.com/inventory.html"
+
+LOCKED_USER:
+  username: "locked_out_user"
+  password: "secret_sauce"
+  errorMessage: "Epic sadface: Sorry, this user has been locked out."
+
+INVALID_USER:
+  username: "invalid_user"
+  password: "wrong_password"
+  errorMessage: "Epic sadface: Username and password do not match any user in this service"
+
+MISSING_PASSWORD:
+  username: "standard_user"
+  password: ""
+  errorMessage: "Epic sadface: Password is required"

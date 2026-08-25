@@ -1,0 +1,15 @@
+webtable_data:
+  USER_001:
+    firstName: "Rajib"
+    lastName: "Ahamed"
+    email: "rajib.test@learningmate.com"
+    age: "35"
+    salary: "120000"
+    department: "Quality Assurance"
+  USER_002:
+    firstName: "Sarah"
+    lastName: "Connor"
+    email: "s.connor@learningmate.com"
+    age: "29"
+    salary: "95000"
+    department: "Engineering"

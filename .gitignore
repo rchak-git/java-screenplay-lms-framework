@@ -1,0 +1,23 @@
+# Target build directory
+target/
+
+# IntelliJ IDEA project configuration
+.idea/
+*.iml
+*.iws
+*.ipr
+/out/
+/shelf/
+/workspace.xml
+
+# Serenity runtime state & generated reports
+.serenity/
+history/
+
+# Logs & temp files
+*.log
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db

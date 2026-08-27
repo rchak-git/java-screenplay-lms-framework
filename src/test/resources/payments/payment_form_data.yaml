@@ -1,0 +1,14 @@
+VALID_PAYMENT:
+  customerName: "Ravi"
+  amount: "100.00"
+  scenario: "SUCCESS"
+
+PENDING_PAYMENT:
+  customerName: "Rajib"
+  amount: "2000.00"
+  scenario: "PENDING"
+
+HIGH_VALUE_PAYMENT:
+  customerName: "Enterprise Client"
+  amount: "999999.99"
+  scenario: "SUCCESS"

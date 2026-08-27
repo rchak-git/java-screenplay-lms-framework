@@ -1,0 +1,3 @@
+let clone = document.querySelector('body').cloneNode(true);
+clone.querySelectorAll('script, style, svg, iframe, path, meta, noscript').forEach(el => el.remove());
+console.log(clone.outerHTML);

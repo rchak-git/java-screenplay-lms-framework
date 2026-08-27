@@ -18,6 +18,7 @@ public class EnterText implements Performable {
     }
 
     public static EnterTextBuilder into(Target target) {
+
         return new EnterTextBuilder(target);
     }
 
@@ -35,6 +36,10 @@ public class EnterText implements Performable {
 
         public EnterTextBuilder(Target target) {
             this.target = target;
+        }
+
+        public EnterText with(String text) {
+            return new EnterText(text, target);
         }
 
         public EnterText of(String text) {

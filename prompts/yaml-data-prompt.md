@@ -2,24 +2,22 @@
 
 **Role**: Test Automation Engineer
 
-**Purpose**: Generate a clean YAML test data file matching the framework's record structure.
+**Purpose**: Generate a clean YAML test data file matching the framework's record structure for the Payment Form.
 
 ## Rules
-- Root elements MUST be unique `dataId` keys (e.g., `VALID_USER`, `LOCKED_USER`).
-- Keep property names lowercase (`username`, `password`, `errorMessage`, `expectedUrl`).
+- Root elements MUST be unique `dataId` keys in UPPER_SNAKE_CASE (e.g., `VALID_PAYMENT`, `PENDING_PAYMENT`).
+- Property names MUST strictly match the framework keys: `customerName`, `amount`, and `scenario`.
 - DO NOT wrap records in outer list nodes or extra wrapper keys.
 
 ## Input Parameters
-- **Target File Path**: `${TARGET_PATH}` (e.g., `src/test/resources/saucedemo/`)
-- **File Name**: `${FILE_NAME}` (e.g., `login_saucedemo_data.yaml`)
-- **Feature Name**: `${FEATURE_NAME}` (e.g., `SauceDemo Login`)
-- **Scenarios**:
-  1. Valid login with standard credentials
-  2. Locked out user attempt with error assertion
-  3. Invalid credentials attempt with error assertion
+- **Target File Path**: src/test/resources/payments/
+- **File Name**: payment_form_data.yaml
+- **Feature Name**: PaymentForm
 
-## Output Instruction
-Create the file `${FILE_NAME}` inside directory `${TARGET_PATH}` using the content below:
+## Scenarios to Generate
+1. `VALID_PAYMENT`: A standard successful transaction (`customerName`: "Ravi", `amount`: "100.00", `scenario`: "SUCCESS").
+2. `PENDING_PAYMENT`: A standard pending transaction (`customerName`: "Rajib", `amount`: "2000.00", `scenario`: "PENDING").
+3. `HIGH_VALUE_PAYMENT`: An edge-case payment with a large amount (e.g., 999999.99) and "SUCCESS" scenario.
 
 ## Canonical Blueprint
 VALID_USER:
@@ -32,7 +30,5 @@ username: "locked_out_user"
 password: "secret_sauce"
 errorMessage: "Epic sadface: Sorry, this user has been locked out."
 
-INVALID_USER:
-username: "invalid_user"
-password: "wrong_password"
-errorMessage: "Epic sadface: Username and password do not match any user in this service"
+## Output Instruction
+Create the file `${FILE_NAME}` inside directory `${TARGET_PATH}` using the generated content matching the blueprint structure.

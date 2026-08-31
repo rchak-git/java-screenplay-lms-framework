@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
         plugin = {"pretty"},
-        features = "src/test/resources/features/moodle",
+        features = "classpath:features/moodle",
         glue = "com.learningmate.screenplay.tests.moodle.stepdefinitions"
 )
-public class MoodleTestSuite {
+public class MoodleIT {
 }

@@ -1,23 +1,17 @@
 package com.learningmate.screenplay.core.question.table;
 
-import com.learningmate.screenplay.core.actor.Actor;
-import com.learningmate.screenplay.core.question.Question;
-import com.learningmate.screenplay.core.question.TextOf;
-import com.learningmate.screenplay.core.ui.Target;
-import com.learningmate.screenplay.core.ability.BrowseTheWeb;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.questions.Text;
+import net.serenitybdd.screenplay.targets.Target;
 
-import java.time.Duration;
 import java.util.List;
 
 public class ReadCellByColumn implements Question<String> {
 
-    private final Target tableHeaderTarget; // Generic header collection target
-    private final Target cellTargetTemplate; // Generic row/col cell target
+    private final Target tableHeaderTarget;
+    private final Target cellTargetTemplate;
     private final String rowKey;
     private final String columnName;
 
@@ -34,31 +28,25 @@ public class ReadCellByColumn implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        WebDriver driver = BrowseTheWeb.as(actor).getDriver();
+        // 1. Resolve header elements directly via Serenity's target engine
+        List<WebElementFacade> headers = tableHeaderTarget.resolveAllFor(actor);
 
-        // 1. Wait for table headers to be present and populated
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(tableHeaderTarget.getLocator()));
-
-        List<WebElement> headers = driver.findElements(tableHeaderTarget.getLocator());
-
+        // 2. Find column index (1-based for XPath)
         int columnIndex = -1;
         for (int i = 0; i < headers.size(); i++) {
             if (headers.get(i).getText().trim().equalsIgnoreCase(columnName)) {
-                columnIndex = i + 1; // 1-indexed for XPath
+                columnIndex = i + 1;
                 break;
             }
         }
 
         if (columnIndex == -1) {
-            throw new RuntimeException("Column header '" + columnName + "' not found in table! Found headers: "
-                    + headers.stream().map(e -> "'" + e.getText().trim() + "'").toList());
+            List<String> foundHeaderNames = headers.stream().map(e -> "'" + e.getText().trim() + "'").toList();
+            throw new AssertionError("Column header '" + columnName + "' not found in table! Found headers: " + foundHeaderNames);
         }
 
-        // 2. Resolve cell target template dynamically
-        Target resolvedCellTarget = cellTargetTemplate.of(rowKey, columnIndex);
-
-        // Delegate to standard TextOf question
-        return TextOf.field(resolvedCellTarget).answeredBy(actor);
+        // 3. Resolve parameterized target and ask native Serenity Text question
+        Target resolvedCellTarget = cellTargetTemplate.of(rowKey, String.valueOf(columnIndex));
+        return Text.of(resolvedCellTarget).answeredBy(actor);
     }
 }

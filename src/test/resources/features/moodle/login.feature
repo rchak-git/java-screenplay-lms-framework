@@ -8,4 +8,4 @@ Feature: Moodle User Login
 
     Examples:
       | username    | password     | main_page_title        |
-      | student  | sandbox24 | Moodle 5.2 sandbox demoX |
+      | student  | sandbox24 | Moodle 5.2 sandbox demo |

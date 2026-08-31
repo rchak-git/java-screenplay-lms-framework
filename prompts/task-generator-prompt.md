@@ -1,65 +1,64 @@
-# Screenplay Task Generator Contract
+# Gherkin-First Serenity BDD Task Generator
 
-**Role**: Lead Test Automation Architect
-**Purpose**: Generate a Screenplay Task that strictly adheres to the team's canonical framework contract.
+**Role**: Senior Serenity BDD Test Automation Architect
+**Purpose**: Generate a Screenplay Task that accepts Gherkin DataTable Maps (`Map<String, String>`).
 
 ## Contract Rules
-- MUST implement `com.learningmate.screenplay.core.action.Performable`.
-- MUST use static factory methods `withDataId(dataId)` and `usingFile(filePath, dataId)` to read data via `DataReader`.
-- DO NOT append "Task" to the class name (e.g., use `Login`, NOT `LoginTask`).
-- DO NOT hardcode credentials or field values inside `performAs()`.
-- MUST use exact imports specified in the canonical structure.
+- MUST implement `net.serenitybdd.screenplay.Task`.
+- MUST declare a SINGLE PUBLIC constructor accepting `Map<String, String>`.
+- MUST use static factory method `withData(Map<String, String> data)` returning `Tasks.instrumented(...)`.
+- DO NOT generate file-reading / YAML constructors or private constructors.
+- Use imperative verb class naming without "Task" suffixes or prefixes (e.g., `UpdateProfile`).
+- Use Serenity's `@Step` annotation for living documentation.
 
 ## Input Parameters
-- **Class Name**: Login
-- **Package Name**: com.learningmate.screenplay.apps.saucedemo.task
-- **UI Locator Class**: LoginPageUi
-- **YAML Default File Path**: saucedemo/login_saucedemo_data.yaml
-- **UI_CLASS_FULL_IMPORT**: com.learningmate.screenplay.apps.saucedemo.ui.LoginPageUi
+- **Class Name**: UpdateProfile
+- **Package Name**: com.learningmate.screenplay.apps.moodle.task
+- **UI Locator Class**: MoodleEditProfileUi
+- **UI_CLASS_FULL_IMPORT**: com.learningmate.screenplay.apps.moodle.ui.MoodleEditProfileUi
+- **MAP_FIELD_RULES**:
+  - "City/town" -> Enter.theValue(value).into(MoodleEditProfileUi.CITY_TOWN_INPUT)
+  - "Country"   -> SelectFromOptions.byVisibleText(value).from(MoodleEditProfileUi.COUNTRY_SELECT)
+  - Submit      -> Click.on(MoodleEditProfileUi.UPDATE_PROFILE_BUTTON)
 
 ## Canonical Code Blueprint
-```java
 package ${PACKAGE_NAME};
 
 import ${UI_CLASS_FULL_IMPORT};
-import com.learningmate.screenplay.core.action.Click;
-import com.learningmate.screenplay.core.action.EnterText;
-import com.learningmate.screenplay.core.action.OpenUrl;
-import com.learningmate.screenplay.core.action.Performable;
-import com.learningmate.screenplay.core.actor.Actor;
-import com.learningmate.screenplay.core.util.DataReader;
+import net.serenitybdd.annotations.Step;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 import java.util.Map;
 
-public class ${CLASS_NAME} implements Performable {
+public class ${CLASS_NAME} implements Task {
 
-    private final String filePath;
-    private final String dataId;
+    private final Map<String, String> data;
 
-    private static final String DEFAULT_FILE_PATH = "${YAML_PATH}";
-
-    private ${CLASS_NAME}(String filePath, String dataId) {
-        this.filePath = filePath;
-        this.dataId = dataId;
+    public ${CLASS_NAME}(Map<String, String> data) {
+        this.data = data;
     }
 
-    public static ${CLASS_NAME} usingFile(String filePath, String dataId) {
-        return new ${CLASS_NAME}(filePath, dataId);
-    }
-
-    public static ${CLASS_NAME} withDataId(String dataId) {
-        return new ${CLASS_NAME}(DEFAULT_FILE_PATH, dataId);
+    public static ${CLASS_NAME} withData(Map<String, String> data) {
+        return instrumented(${CLASS_NAME}.class, data);
     }
 
     @Override
-    public void performAs(Actor actor) {
-        Map<String, String> data = DataReader.getRecord(filePath, dataId);
-
-        actor.attemptsTo(
-                OpenUrl.to("[https://www.saucedemo.com/](https://www.saucedemo.com/)"),
-                EnterText.into(${UI_CLASS}.USERNAME_INPUT).of(data.get("username")),
-                EnterText.into(${UI_CLASS}.PASSWORD_INPUT).of(data.get("password")),
-                Click.on(${UI_CLASS}.LOGIN_BUTTON)
-        );
+    @Step("{0} updates profile fields")
+    public <T extends Actor> void performAs(T actor) {
+        if (data != null) {
+            data.forEach((field, value) -> {
+                if ("City/town".equalsIgnoreCase(field)) {
+                    actor.attemptsTo(Enter.theValue(value).into(${UI_CLASS}.CITY_TOWN_INPUT));
+                } else if ("Country".equalsIgnoreCase(field)) {
+                    actor.attemptsTo(SelectFromOptions.byVisibleText(value).from(${UI_CLASS}.COUNTRY_SELECT));
+                }
+            });
+        }
+        actor.attemptsTo(Click.on(${UI_CLASS}.UPDATE_PROFILE_BUTTON));
     }
 }

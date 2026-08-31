@@ -1,5 +1,5 @@
 package com.learningmate.screenplay.apps.moodle.ui;
-import com.learningmate.screenplay.core.ui.Target;
+import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
 
 public class MoodleLoginUi {

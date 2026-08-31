@@ -1,9 +1,12 @@
 package com.learningmate.screenplay.apps.moodle.question;
 
 import com.learningmate.screenplay.apps.moodle.ui.MoodleLoginUi;
-import com.learningmate.screenplay.core.actor.Actor;
-import com.learningmate.screenplay.core.question.Question;
-import com.learningmate.screenplay.core.question.TextOf;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.questions.Text;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
 
 public class MainPageLandingTitle implements Question<String> {
 
@@ -13,7 +16,10 @@ public class MainPageLandingTitle implements Question<String> {
 
     @Override
     public String answeredBy(Actor actor) {
-        // Reads the visible text from the LANDING_PAGE_TITLE target
-            return TextOf.field(MoodleLoginUi.LANDING_PAGE_TITLE).answeredBy(actor);
+        // Asks Serenity's built-in Text question using your MoodleLoginUi target
+        actor.attemptsTo(
+                WaitUntil.the(MoodleLoginUi.LANDING_PAGE_TITLE, isVisible()).forNoMoreThan(10).seconds()
+        );
+        return Text.of(MoodleLoginUi.LANDING_PAGE_TITLE).answeredBy(actor);
     }
 }

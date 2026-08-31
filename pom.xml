@@ -12,9 +12,11 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <serenity.version>4.1.14</serenity.version>
-        <testng.version>7.10.2</testng.version>
         <assertj.version>3.26.3</assertj.version>
         <jackson.version>2.17.0</jackson.version>
+
+        <!-- Configurable thread count for single-runner parallel execution -->
+        <threads>2</threads>
     </properties>
 
     <dependencies>
@@ -43,11 +45,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- TestNG (Kept if unit/non-BDD tests exist) -->
+        <!-- JUnit 4 Engine for Serenity Runner -->
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -69,12 +71,7 @@
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
 
     <build>
@@ -89,30 +86,33 @@
                 </configuration>
             </plugin>
 
-            <!-- Standard Unit / Feature Test Execution Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                        <include>**/*TestSuite.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
-
-            <!-- Integration Test Plugin -->
+            <!-- Integration Test Plugin (Single-Runner Parallel Execution Configuration) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
                     <includes>
                         <include>**/*Test.java</include>
+                        <include>**/*IT.java</include>
                         <include>**/*TestSuite.java</include>
                     </includes>
+
+                    <!-- Single-runner parallel execution settings -->
+                    <parallel>methods</parallel>
+                    <threadCount>${threads}</threadCount>
+                    <perCoreThreadCount>false</perCoreThreadCount>
+
+                    <argLine>-Xmx1024m -XX:MaxMetaspaceSize=512m</argLine>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>3.2.5</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <goals>

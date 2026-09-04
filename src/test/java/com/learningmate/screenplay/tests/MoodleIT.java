@@ -1,4 +1,4 @@
-package com.learningmate.screenplay.tests.moodle;
+package com.learningmate.screenplay.tests;
 
 import io.cucumber.junit.CucumberOptions;
 import net.serenitybdd.cucumber.CucumberWithSerenity;

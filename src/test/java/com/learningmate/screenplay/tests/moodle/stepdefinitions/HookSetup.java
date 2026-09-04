@@ -1,6 +1,7 @@
 package com.learningmate.screenplay.tests.moodle.stepdefinitions;
 
-import com.learningmate.screenplay.apps.moodle.task.ResetProfileToDefault;
+
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import net.serenitybdd.screenplay.actors.OnStage;
@@ -13,18 +14,6 @@ public class HookSetup {
         // Automatically manages thread-safe actors and WebDrivers for parallel execution
         OnStage.setTheStage(new OnlineCast());
     }
-/*
-    @Before(value = "@EnsureBaselineProfile", order = 2)
-    public void ensureBaselineProfileState() {
-        // If an actor is logged in and active, ensure baseline state before step execution
-        if (OnStage.theActorInTheSpotlight() != null) {
-            OnStage.theActorInTheSpotlight().attemptsTo(
-                    ResetProfileToDefault.to("Brussels", "Belgium")
-            );
-        }
-    }
-
- */
 
     @After
     public void drawTheCurtain() {

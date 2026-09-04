@@ -1,4 +1,4 @@
-package com.learningmate.screenplay.apps.moodle.task;
+package com.learningmate.screenplay.apps.moodle.task.ui;
 
 import com.learningmate.screenplay.apps.moodle.ui.MoodleEditProfileUi;
 import net.serenitybdd.annotations.Step;

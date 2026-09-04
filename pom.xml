@@ -15,8 +15,8 @@
         <assertj.version>3.26.3</assertj.version>
         <jackson.version>2.17.0</jackson.version>
 
-        <!-- Configurable thread count for single-runner parallel execution -->
-        <threads>2</threads>
+        <!-- Parallel Execution Control: Number of concurrent JVM forks/browsers -->
+        <forks>2</forks>
     </properties>
 
     <dependencies>
@@ -72,6 +72,20 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- Serenity BDD REST Assured Integration -->
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-rest-assured</artifactId>
+            <version>${serenity.version}</version>
+        </dependency>
+
+        <!-- Serenity Screenplay REST Integration -->
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-screenplay-rest</artifactId>
+            <version>${serenity.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -86,7 +100,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Integration Test Plugin (Single-Runner Parallel Execution Configuration) -->
+            <!-- Integration Test Plugin (Fork-Based Parallel Execution) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -99,20 +113,12 @@
                         <include>**/*TestSuite.java</include>
                     </includes>
 
-                    <!-- Single-runner parallel execution settings -->
-                    <parallel>methods</parallel>
-                    <threadCount>${threads}</threadCount>
-                    <perCoreThreadCount>false</perCoreThreadCount>
+                    <!-- JVM Forking Configuration for Parallel Execution -->
+                    <forkCount>${forks}</forkCount>
+                    <reuseForks>true</reuseForks>
 
                     <argLine>-Xmx1024m -XX:MaxMetaspaceSize=512m</argLine>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>3.2.5</version>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <goals>

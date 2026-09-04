@@ -1,6 +1,6 @@
 package com.learningmate.screenplay.tests.moodle.stepdefinitions;
 
-import com.learningmate.screenplay.apps.moodle.task.NavigateMenu;
+import com.learningmate.screenplay.apps.moodle.task.ui.NavigateMenu;
 import io.cucumber.java.en.When;
 
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;

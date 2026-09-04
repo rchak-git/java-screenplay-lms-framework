@@ -1,18 +1,11 @@
 package com.learningmate.screenplay.tests.moodle.stepdefinitions;
 
-import com.learningmate.screenplay.apps.moodle.task.UpdateProfile;
-import com.learningmate.screenplay.apps.moodle.ui.MoodleProfileUi;
+import com.learningmate.screenplay.apps.moodle.task.ui.UpdateProfile;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import net.serenitybdd.screenplay.actions.Click;
-import net.serenitybdd.screenplay.questions.Text;
-
-import java.util.Map;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
-import static org.hamcrest.Matchers.equalTo;
 
 public class EditProfileStepDefinitions {
 

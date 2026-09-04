@@ -1,4 +1,4 @@
-package com.learningmate.screenplay.apps.moodle.task;
+package com.learningmate.screenplay.apps.moodle.task.ui;
 
 import com.learningmate.screenplay.apps.moodle.ui.MoodleLoginUi;
 import com.learningmate.screenplay.core.action.TypeInto;
@@ -6,7 +6,6 @@ import net.serenitybdd.annotations.Step;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Click;
-import net.serenitybdd.screenplay.actions.Enter;
 
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
